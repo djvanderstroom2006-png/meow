@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Meow</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: Arial, sans-serif;
+      background-color: #fff;
+      overflow: hidden;
+    }
+
+    .container {
+      text-align: center;
+    }
+
+    img {
+      max-width: 250px;
+      height: auto;
+      display: block;
+      margin: 0 auto 20px;
+    }
+
+    h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+      font-weight: normal;
+    }
+
+    button {
+      font-size: 16px;
+      padding: 10px 20px;
+      margin: 0 10px;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    #yesBtn {
+      transform: scale(1);
+    }
+
+    /* Love screen */
+    .love-screen {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      width: 100vw;
+      text-align: center;
+    }
+
+    .love-screen h1 {
+      font-size: 48px;
+      color: #ff4d6d;
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container" id="mainScreen">
+    <img src="https://media1.tenor.com/m/o_5RQarGvJ0AAAAC/kiss.gif" alt="gif">
+    <h1>will you be my valentine</h1>
+    <div>
+      <button id="yesBtn">yes</button>
+      <button id="noBtn">no</button>
+    </div>
+  </div>
+
+  <div class="love-screen" id="loveScreen">
+    <h1>I love you &lt;3</h1>
+    <canvas id="confetti"></canvas>
+  </div>
+
+  <script>
+    const yesBtn = document.getElementById("yesBtn");
+    const noBtn = document.getElementById("noBtn");
+    const mainScreen = document.getElementById("mainScreen");
+    const loveScreen = document.getElementById("loveScreen");
+
+    let yesScale = 1;
+
+    noBtn.addEventListener("click", () => {
+      noBtn.textContent = "are you sure?";
+      yesScale += 0.2;
+      yesBtn.style.transform = `scale(${yesScale})`;
+    });
+
+    yesBtn.addEventListener("click", () => {
+      mainScreen.style.display = "none";
+      loveScreen.style.display = "flex";
+      startConfetti();
+    });
+
+    /* Confetti */
+    function startConfetti() {
+      const canvas = document.getElementById("confetti");
+      const ctx = canvas.getContext("2d");
+
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      const confettiPieces = Array.from({ length: 150 }, () => ({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height - canvas.height,
+        size: Math.random() * 6 + 4,
+        speed: Math.random() * 3 + 2,
+        color: `hsl(${Math.random() * 360}, 100%, 70%)`
+      }));
+
+      function update() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        confettiPieces.forEach(p => {
+          p.y += p.speed;
+          if (p.y > canvas.height) p.y = -10;
+
+          ctx.fillStyle = p.color;
+          ctx.fillRect(p.x, p.y, p.size, p.size);
+        });
+
+        requestAnimationFrame(update);
+      }
+
+      update();
+    }
+  </script>
+
+</body>
+</html>
