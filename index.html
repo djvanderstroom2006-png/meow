@@ -37,11 +37,10 @@
       padding: 10px 20px;
       margin: 0 10px;
       cursor: pointer;
-      transition: transform 0.3s ease;
     }
 
-    #yesBtn {
-      transform: scale(1);
+    #pinkBtn {
+      color: hotpink;
     }
 
     /* Love screen */
@@ -71,11 +70,11 @@
 <body>
 
   <div class="container" id="mainScreen">
-    <img src="https://media1.tenor.com/m/o_5RQarGvJ0AAAAC/kiss.gif" alt="gif">
+    <img src="https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif" alt="gif">
     <h1>will you be my valentine</h1>
     <div>
       <button id="yesBtn">yes</button>
-      <button id="noBtn">no</button>
+      <button id="pinkBtn">Yes, but in pink</button>
     </div>
   </div>
 
@@ -86,23 +85,18 @@
 
   <script>
     const yesBtn = document.getElementById("yesBtn");
-    const noBtn = document.getElementById("noBtn");
+    const pinkBtn = document.getElementById("pinkBtn");
     const mainScreen = document.getElementById("mainScreen");
     const loveScreen = document.getElementById("loveScreen");
 
-    let yesScale = 1;
-
-    noBtn.addEventListener("click", () => {
-      noBtn.textContent = "are you sure?";
-      yesScale += 0.2;
-      yesBtn.style.transform = `scale(${yesScale})`;
-    });
-
-    yesBtn.addEventListener("click", () => {
+    function goToLove() {
       mainScreen.style.display = "none";
       loveScreen.style.display = "flex";
       startConfetti();
-    });
+    }
+
+    yesBtn.addEventListener("click", goToLove);
+    pinkBtn.addEventListener("click", goToLove);
 
     /* Confetti */
     function startConfetti() {
@@ -112,7 +106,7 @@
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
 
-      const confettiPieces = Array.from({ length: 150 }, () => ({
+      const confetti = Array.from({ length: 150 }, () => ({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height - canvas.height,
         size: Math.random() * 6 + 4,
@@ -120,23 +114,21 @@
         color: `hsl(${Math.random() * 360}, 100%, 70%)`
       }));
 
-      function update() {
+      function animate() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        confettiPieces.forEach(p => {
-          p.y += p.speed;
-          if (p.y > canvas.height) p.y = -10;
-
-          ctx.fillStyle = p.color;
-          ctx.fillRect(p.x, p.y, p.size, p.size);
+        confetti.forEach(c => {
+          c.y += c.speed;
+          if (c.y > canvas.height) c.y = -10;
+          ctx.fillStyle = c.color;
+          ctx.fillRect(c.x, c.y, c.size, c.size);
         });
-
-        requestAnimationFrame(update);
+        requestAnimationFrame(animate);
       }
 
-      update();
+      animate();
     }
   </script>
 
 </body>
 </html>
+
